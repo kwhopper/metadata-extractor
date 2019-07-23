@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -37,6 +37,16 @@ public class Atom
     public Atom(SequentialReader reader) throws IOException
     {
         this.size = reader.getUInt32();
+
+        /*
+         * A zero size isn't legal for contained atoms, but Canon uses it to
+         * terminate the CNTH atom (EOS 100D, PowerShot SX30 IS)
+         */
+        if (size == 0) {
+            // previous Atom was terminated by a 32bit zero block
+            size = reader.getUInt32();
+        }
+
         this.type = reader.getString(4);
         if (size == 1) {
             size = reader.getInt64();

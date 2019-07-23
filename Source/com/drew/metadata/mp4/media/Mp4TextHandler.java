@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class Mp4TextHandler extends Mp4MediaHandler<Mp4TextDirectory>
     @Override
     protected Mp4TextDirectory getDirectory()
     {
-        return directory;
+        return new Mp4TextDirectory();
     }
 
     @Override

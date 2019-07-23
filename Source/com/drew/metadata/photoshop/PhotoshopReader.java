@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@ import com.drew.lang.ByteArrayReader;
 import com.drew.lang.SequentialByteArrayReader;
 import com.drew.lang.SequentialReader;
 import com.drew.lang.annotations.NotNull;
+import com.drew.lang.annotations.Nullable;
+import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifReader;
 import com.drew.metadata.icc.IccReader;
@@ -74,8 +76,16 @@ public class PhotoshopReader implements JpegSegmentMetadataReader
 
     public void extract(@NotNull final SequentialReader reader, int length, @NotNull final Metadata metadata)
     {
+        extract(reader, length, metadata, null);
+    }
+
+    public void extract(@NotNull final SequentialReader reader, int length, @NotNull final Metadata metadata, @Nullable final Directory parentDirectory)
+    {
         PhotoshopDirectory directory = new PhotoshopDirectory();
         metadata.addDirectory(directory);
+
+        if (parentDirectory != null)
+            directory.setParent(parentDirectory);
 
         // Data contains a sequence of Image Resource Blocks (IRBs):
         //

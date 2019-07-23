@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
  */
 package com.drew.metadata.heif.boxes;
 
+import com.drew.lang.Charsets;
 import com.drew.lang.SequentialReader;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class HandlerBox extends FullBox
         reader.skip(4); // Pre-defined
         handlerType = reader.getString(4);
         reader.skip(12); // Reserved
-        name = reader.getNullTerminatedString((int)box.size - 32, Charset.defaultCharset());
+        name = reader.getNullTerminatedString((int)box.size - 32, Charsets.UTF_8);
     }
 
     public String getHandlerType()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package com.drew.metadata.mov;
 
 import com.drew.imaging.quicktime.QuickTimeHandler;
+import com.drew.lang.DateUtil;
 import com.drew.lang.SequentialByteArrayReader;
 import com.drew.lang.SequentialReader;
 import com.drew.lang.annotations.NotNull;
@@ -28,10 +29,7 @@ import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.mov.atoms.Atom;
 import com.drew.metadata.mov.media.QuickTimeMediaDirectory;
-
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Classes that extend this class should be from the media dat atom types:
@@ -44,16 +42,17 @@ public abstract class QuickTimeMediaHandler<T extends QuickTimeDirectory> extend
     public QuickTimeMediaHandler(Metadata metadata)
     {
         super(metadata);
+
         if (QuickTimeHandlerFactory.HANDLER_PARAM_CREATION_TIME != null && QuickTimeHandlerFactory.HANDLER_PARAM_MODIFICATION_TIME != null) {
             // Get creation/modification times
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(1904, 0, 1, 0, 0, 0);      // January 1, 1904  -  Macintosh Time Epoch
-            Date date = calendar.getTime();
-            long macToUnixEpochOffset = date.getTime();
-            String creationTimeStamp = new Date(QuickTimeHandlerFactory.HANDLER_PARAM_CREATION_TIME * 1000 + macToUnixEpochOffset).toString();
-            String modificationTimeStamp = new Date(QuickTimeHandlerFactory.HANDLER_PARAM_MODIFICATION_TIME * 1000 + macToUnixEpochOffset).toString();
-            directory.setString(QuickTimeMediaDirectory.TAG_CREATION_TIME, creationTimeStamp);
-            directory.setString(QuickTimeMediaDirectory.TAG_MODIFICATION_TIME, modificationTimeStamp);
+            directory.setDate(
+                QuickTimeMediaDirectory.TAG_CREATION_TIME,
+                DateUtil.get1Jan1904EpochDate(QuickTimeHandlerFactory.HANDLER_PARAM_CREATION_TIME)
+            );
+            directory.setDate(
+                QuickTimeMediaDirectory.TAG_MODIFICATION_TIME,
+                DateUtil.get1Jan1904EpochDate(QuickTimeHandlerFactory.HANDLER_PARAM_MODIFICATION_TIME)
+            );
         }
     }
 

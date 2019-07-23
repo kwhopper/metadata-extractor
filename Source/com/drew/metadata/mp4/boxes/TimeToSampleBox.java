@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -49,7 +49,14 @@ public class TimeToSampleBox extends FullBox
 
     public void addMetadata(Mp4VideoDirectory directory)
     {
-        float frameRate = (float) Mp4HandlerFactory.HANDLER_PARAM_TIME_SCALE/(float)entries.get(0).sampleDelta;
+        float sampleCount = 0;
+
+        for (EntryCount ec : entries) {
+            sampleCount += ec.sampleCount;
+        }
+
+        float frameRate = (float) Mp4HandlerFactory.HANDLER_PARAM_TIME_SCALE/((float) Mp4HandlerFactory.HANDLER_PARAM_DURATION / sampleCount);
+
         directory.setFloat(Mp4VideoDirectory.TAG_FRAME_RATE, frameRate);
     }
 

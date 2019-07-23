@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -844,7 +844,8 @@ public abstract class ExifDescriptorBase<T extends Directory> extends TagDescrip
                 sb.append(", return not detected");
         }
 
-        if ((value & 0x10) != 0)
+        // If 0x10 is set and the lowest byte is not zero - then flash is Auto
+        if ((value & 0x10) != 0 && (value & 0x0F) != 0)
             sb.append(", auto");
 
         if ((value & 0x40) != 0)

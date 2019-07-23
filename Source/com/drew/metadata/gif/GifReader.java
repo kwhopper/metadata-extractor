@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -272,7 +272,11 @@ public class GifReader
         {
             // XMP data extension
             byte[] xmpBytes = gatherBytes(reader);
-            new XmpReader().extract(xmpBytes, 0, xmpBytes.length - 257, metadata, null);
+            int xmpLengh = xmpBytes.length - 257; // Exclude the "magic trailer", see XMP Specification Part 3, 1.1.2 GIF
+            if (xmpLengh > 0) {
+                // Only extract valid blocks
+                new XmpReader().extract(xmpBytes, 0, xmpBytes.length - 257, metadata, null);
+            }
         }
         else if (extensionType.equals("ICCRGBG1012"))
         {

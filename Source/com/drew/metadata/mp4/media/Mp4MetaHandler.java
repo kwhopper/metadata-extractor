@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class Mp4MetaHandler extends Mp4MediaHandler<Mp4MetaDirectory>
     @Override
     protected Mp4MetaDirectory getDirectory()
     {
-        return directory;
+        return new Mp4MetaDirectory();
     }
 
     @Override

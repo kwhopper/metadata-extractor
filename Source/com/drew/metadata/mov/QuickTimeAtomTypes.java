@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ public class QuickTimeAtomTypes
     public static final String ATOM_SAMPLE_DESCRIPTION       = "stsd";
     public static final String ATOM_TIME_TO_SAMPLE           = "stts";
     public static final String ATOM_MEDIA_HEADER             = "mdhd";
+    public static final String ATOM_CANON_THUMBNAIL          = "CNTH";
 
     public static ArrayList<String> _atomList = new ArrayList<String>();
 
@@ -55,5 +56,6 @@ public class QuickTimeAtomTypes
         _atomList.add(ATOM_SAMPLE_DESCRIPTION);
         _atomList.add(ATOM_TIME_TO_SAMPLE);
         _atomList.add(ATOM_MEDIA_HEADER);
+        _atomList.add(ATOM_CANON_THUMBNAIL);
     }
 }

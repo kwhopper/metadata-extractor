@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -237,7 +237,7 @@ public class GpsDescriptor extends TagDescriptor<GpsDirectory>
             return null;
         String gpsSpeedRef = value.trim();
         if ("K".equalsIgnoreCase(gpsSpeedRef)) {
-            return "kph";
+            return "km/h";
         } else if ("M".equalsIgnoreCase(gpsSpeedRef)) {
             return "mph";
         } else if ("N".equalsIgnoreCase(gpsSpeedRef)) {

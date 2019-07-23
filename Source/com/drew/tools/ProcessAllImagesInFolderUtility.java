@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@
 
 package com.drew.tools;
 
-import com.adobe.xmp.XMPException;
-import com.adobe.xmp.XMPIterator;
-import com.adobe.xmp.XMPMeta;
-import com.adobe.xmp.properties.XMPPropertyInfo;
+import com.adobe.internal.xmp.XMPException;
+import com.adobe.internal.xmp.XMPIterator;
+import com.adobe.internal.xmp.XMPMeta;
+import com.adobe.internal.xmp.options.IteratorOptions;
+import com.adobe.internal.xmp.properties.XMPPropertyInfo;
 import com.drew.imaging.FileType;
 import com.drew.imaging.FileTypeDetector;
 import com.drew.imaging.ImageMetadataReader;
@@ -173,11 +174,12 @@ public class ProcessAllImagesInFolderUtility
         // TODO obtain these from FileType enum directly
         private final Set<String> _supportedExtensions = new HashSet<String>(
             Arrays.asList(
-                "jpg", "jpeg", "png", "gif", "bmp", "ico", "webp", "pcx", "ai", "eps",
+                "jpg", "jpeg", "png", "gif", "bmp", "heic", "ico", "webp", "pcx", "ai", "eps",
                 "nef", "crw", "cr2", "orf", "arw", "raf", "srw", "x3f", "rw2", "rwl",
                 "tif", "tiff", "psd", "dng",
-                "3g2", "3gp", "m4v", "mov", "mp4",
-                "pbm", "pnm", "pgm"));
+                "j2c", "jp2", "jpf", "jpm", "mj2",
+                "3g2", "3gp", "m4v", "mov", "mp4", "m2v", "mts",
+                "pbm", "pnm", "pgm", "ppm"));
 
         private int _processedFileCount = 0;
         private int _exceptionCount = 0;
@@ -341,17 +343,18 @@ public class ProcessAllImagesInFolderUtility
                             XmpDirectory xmpDirectory = (XmpDirectory)directory;
                             XMPMeta xmpMeta = xmpDirectory.getXMPMeta();
                             try {
-                                XMPIterator iterator = xmpMeta.iterator();
+                                IteratorOptions options = new IteratorOptions().setJustLeafnodes(true);
+                                XMPIterator iterator = xmpMeta.iterator(options);
                                 while (iterator.hasNext()) {
                                     XMPPropertyInfo prop = (XMPPropertyInfo)iterator.next();
                                     String ns = prop.getNamespace();
                                     String path = prop.getPath();
                                     String value = prop.getValue();
 
+                                    if (path == null)
+                                        continue;
                                     if (ns == null)
                                         ns = "";
-                                    if (path == null)
-                                        path = "";
 
                                     final int MAX_XMP_VALUE_LENGTH = 512;
                                     if (value == null)
@@ -431,7 +434,11 @@ public class ProcessAllImagesInFolderUtility
             if (!metadataDir.exists())
                 metadataDir.mkdir();
 
-            String outputPath = String.format("%s/metadata/%s.txt", file.getParent(), file.getName());
+            File javaDir = new File(String.format("%s/metadata/java", file.getParent()));
+            if (!javaDir.exists())
+                javaDir.mkdir();
+
+            String outputPath = String.format("%s/metadata/java/%s.txt", file.getParent(), file.getName());
             Writer writer = new OutputStreamWriter(
                 new FileOutputStream(outputPath),
                 "UTF-8"

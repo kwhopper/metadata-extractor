@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -233,9 +233,6 @@ public abstract class ExifDirectoryBase extends Directory
     public static final int TAG_ISO_SPEED                         = 0x8833;
     public static final int TAG_ISO_SPEED_LATITUDE_YYY            = 0x8834;
     public static final int TAG_ISO_SPEED_LATITUDE_ZZZ            = 0x8835;
-    /** Non-standard, but in use. */
-    public static final int TAG_TIME_ZONE_OFFSET                  = 0x882A;
-    public static final int TAG_SELF_TIMER_MODE                   = 0x882B;
 
     public static final int TAG_EXIF_VERSION                      = 0x9000;
     public static final int TAG_DATETIME_ORIGINAL                 = 0x9003;
@@ -684,6 +681,7 @@ public abstract class ExifDirectoryBase extends Directory
         map.put(TAG_EXPOSURE_TIME, "Exposure Time");
         map.put(TAG_FNUMBER, "F-Number");
         map.put(TAG_IPTC_NAA, "IPTC/NAA");
+        map.put(TAG_PHOTOSHOP_SETTINGS, "Photoshop Settings");
         map.put(TAG_INTER_COLOR_PROFILE, "Inter Color Profile");
         map.put(TAG_EXPOSURE_PROGRAM, "Exposure Program");
         map.put(TAG_SPECTRAL_SENSITIVITY, "Spectral Sensitivity");
@@ -698,8 +696,6 @@ public abstract class ExifDirectoryBase extends Directory
         map.put(TAG_ISO_SPEED, "ISO Speed");
         map.put(TAG_ISO_SPEED_LATITUDE_YYY, "ISO Speed Latitude yyy");
         map.put(TAG_ISO_SPEED_LATITUDE_ZZZ, "ISO Speed Latitude zzz");
-        map.put(TAG_TIME_ZONE_OFFSET, "Time Zone Offset");
-        map.put(TAG_SELF_TIMER_MODE, "Self Timer Mode");
         map.put(TAG_EXIF_VERSION, "Exif Version");
         map.put(TAG_DATETIME_ORIGINAL, "Date/Time Original");
         map.put(TAG_DATETIME_DIGITIZED, "Date/Time Digitized");

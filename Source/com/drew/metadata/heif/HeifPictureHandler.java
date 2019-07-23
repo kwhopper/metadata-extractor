@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 Drew Noakes
+ * Copyright 2002-2019 Drew Noakes and contributors
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -58,7 +58,10 @@ public class HeifPictureHandler extends HeifHandler<HeifDirectory>
             HeifBoxTypes.BOX_ITEM_INFO,
             HeifBoxTypes.BOX_ITEM_LOCATION,
             HeifBoxTypes.BOX_IMAGE_SPATIAL_EXTENTS,
-            HeifBoxTypes.BOX_AUXILIARY_TYPE_PROPERTY);
+            HeifBoxTypes.BOX_AUXILIARY_TYPE_PROPERTY,
+            HeifBoxTypes.BOX_IMAGE_ROTATION,
+            HeifBoxTypes.BOX_COLOUR_INFO,
+            HeifBoxTypes.BOX_PIXEL_INFORMATION);
 
         return boxes.contains(box.type);
     }
@@ -88,6 +91,15 @@ public class HeifPictureHandler extends HeifHandler<HeifDirectory>
             imageSpatialExtentsProperty.addMetadata(directory);
         } else if (box.type.equals(HeifBoxTypes.BOX_AUXILIARY_TYPE_PROPERTY)) {
             AuxiliaryTypeProperty auxiliaryTypeProperty = new AuxiliaryTypeProperty(reader, box);
+        } else if (box.type.equals(HeifBoxTypes.BOX_IMAGE_ROTATION)) {
+            ImageRotationBox imageRotationBox = new ImageRotationBox(reader, box);
+            imageRotationBox.addMetadata(directory);
+        } else if (box.type.equals(HeifBoxTypes.BOX_COLOUR_INFO)) {
+            ColourInformationBox colourInformationBox = new ColourInformationBox(reader, box, metadata);
+            colourInformationBox.addMetadata(directory);
+        } else if (box.type.equals(HeifBoxTypes.BOX_PIXEL_INFORMATION)) {
+            PixelInformationBox pixelInformationBox = new PixelInformationBox(reader, box);
+            pixelInformationBox.addMetadata(directory);
         }
         return this;
     }
